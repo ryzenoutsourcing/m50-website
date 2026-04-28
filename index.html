@@ -1178,7 +1178,7 @@
                 try {
                     submitBtn.innerText = translations[currentLang]?.form_submit === "VERZEND AANVRAAG" ? "VERZENDEN..." : (currentLang === "fr" ? "ENVOI..." : "SENDING...");
                     submitBtn.disabled = true;
-                   const formData = new FormData(contactForm);
+                  const formData = new FormData(contactForm);
 const data = Object.fromEntries(formData.entries());
 
 const res = await fetch('/api/send-email', {
@@ -1187,10 +1187,10 @@ const res = await fetch('/api/send-email', {
     'Content-Type': 'application/json'
   },
   body: JSON.stringify({
-  naam: name,
-  email: email,
-  mobiel: phone,
-  bericht: message
+  name: data.naam,
+  email: data.email,
+  phone: data.mobiel,
+  message: data.bericht
 })
 });
 
