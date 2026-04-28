@@ -1,4 +1,4 @@
-await fetch("https://YOUR_PROJECT.supabase.co/rest/v1/contact_submissions", {
+await fetch("https://cnpdtxmabmkmraauiseh.supabase.co/rest/v1/", {
   method: "POST",
   headers: {
     "apikey": process.env.SUPABASE_ANON_KEY,
