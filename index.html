@@ -890,7 +890,6 @@
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
         // ---------- TAALVERTALINGEN (front-end only) ----------
         const translations = {
@@ -1111,9 +1110,6 @@
         });
 
         // ---------- ORIGINELE SCRIPTS (aangepast voor vertaalde alerts) ----------
-        const SUPABASE_URL = 'https://cnpdtxmabmkmraauiseh.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_uhfcLXaLLsVDWBOS6PUmQA_OOyBSiE7';
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         const mobileMenuBtn = document.getElementById('mobile-menu-btn');
         const closeMenu = document.getElementById('close-menu');
@@ -1182,12 +1178,26 @@
                 try {
                     submitBtn.innerText = translations[currentLang]?.form_submit === "VERZEND AANVRAAG" ? "VERZENDEN..." : (currentLang === "fr" ? "ENVOI..." : "SENDING...");
                     submitBtn.disabled = true;
-                    const formData = new FormData(contactForm);
-                    const data = Object.fromEntries(formData.entries());
-                    const { error } = await supabaseClient.functions.invoke('send-email', { body: data });
-                    if (error) throw error;
-                    alert(window.currentLangMessages?.success || translations[currentLang].alert_success);
-                    contactForm.reset();
+                   const formData = new FormData(contactForm);
+const data = Object.fromEntries(formData.entries());
+
+const res = await fetch('/api/send-email', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    name: data.naam,
+    email: data.email,
+    phone: data.mobiel,
+    subject: "M50 aanvraag",
+    message: data.bericht
+  })
+});
+
+const result = await res.json();
+
+if (!res.ok) throw new Error(result.error);
                 } catch (err) {
                     console.error('Fout:', err);
                     alert(window.currentLangMessages?.error || translations[currentLang].alert_error);
