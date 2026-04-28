@@ -1187,12 +1187,11 @@ const res = await fetch('/api/send-email', {
     'Content-Type': 'application/json'
   },
   body: JSON.stringify({
-    name: data.naam,
-    email: data.email,
-    phone: data.mobiel,
-    subject: "M50 aanvraag",
-    message: data.bericht
-  })
+  naam: name,
+  email: email,
+  mobiel: phone,
+  bericht: message
+})
 });
 
 const result = await res.json();
