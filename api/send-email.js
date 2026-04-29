@@ -8,7 +8,9 @@ export default async function handler(req, res) {
   }
 
   const { name, email, phone, message } = req.body;
-
+if (!name || !email || !message) {
+  return res.status(400).json({ error: "Missing required fields" });
+}
   try {
     // 1. SAVE TO SUPABASE
     const response = await fetch(
@@ -54,6 +56,7 @@ export default async function handler(req, res) {
  await resend.emails.send({
   from: "onboarding@resend.dev",
   to: email,
+   reply_to: "ryzenoutsourcing@gmail.com",
   subject: "Auto M50 – Demande bien reçue / Aanvraag ontvangen",
   html: `
     <div style="font-family: Arial, sans-serif; line-height: 1.6;">
@@ -87,6 +90,7 @@ export default async function handler(req, res) {
     return res.status(200).json({ success: true });
 
   } catch (err) {
-    return res.status(500).json({ error: err.message });
-  }
+  console.error("EMAIL ERROR:", err);
+  return res.status(500).json({ error: err.message });
+}
 }
